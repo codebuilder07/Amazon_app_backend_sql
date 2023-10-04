@@ -1,0 +1,77 @@
+
+''''aspect 4''''
+
+begin
+add_orders(53,61,20,7);
+End;
+/
+begin
+add_orders(54,69,21,0);
+End;
+/
+begin
+add_orders(55,68,23,8);
+End;
+/
+begin
+add_orders(56,66,25,9);
+End;
+/
+begin
+add_orders(6014,5008,3010,7);
+End;
+/
+begin
+add_orders(6015,5008,3003,3);
+End;
+/
+select product_id, sum(orders_sold) as sum_orders_sold
+from orders
+group by product_id
+order by sum_orders_sold details;
+select product.product_name, customer.customer_firstname,customer.customer_lastname,address.address_address,address.address_city,address.address_state,address.address_pincode
+from orders
+join customer on customer.customer_id = orders.customer_id
+join product on product.product_id = orders.product_id
+join address on address.address_id = customer.address_id
+where product_name = 'self driving video camera';
+
+select * from orders;
+
+'''aspect 5''''
+create table travelz(
+shipped_id decimal(10) PRIMARY KEY,
+orders_id decimal(10) not null);
+
+ALTER TABLE travelz
+ADD CONSTRAINT order_travelz_fk
+FOREIGN KEY(orders_id)
+REFERENCES orders(orders_id);
+
+Create or replace procedure travel_proc(
+shipped_id_proc in decimal,
+orders_id_proc in decimal)
+is
+begin
+insert into travelz(shipped_id, orders_id)
+values(shipped_id_proc,orders_id_proc);
+End;
+/
+begin
+travel_proc(71,500);
+End;
+/
+begin
+travel_proc(72,509);
+End;
+/
+
+select travelz.shipped_id, product.product_name,
+customer.customer_firstname,customer.customer_lastname,customer.customer_email,
+address.address_address,address.address_city,address.address_state,address.address_pincode
+from travelz
+join customer on customer.customer_id = orders.customer_id
+join address on address.address_id = customer.address_id
+join orders on orders.orders_id = travelz.orders_id
+join product on product.product_id = orders.product_id
+
